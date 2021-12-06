@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+.vscode
+.DS_Store
+smoke-simulation
+
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+Makefile
