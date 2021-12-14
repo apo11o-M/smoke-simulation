@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Fps.hpp"
+#include "UIRenderer.hpp"
 
 using std::cout;
 using std::endl;
@@ -13,7 +14,7 @@ using sf::Color;
 int main() {
     cout << "Program Start.." << endl;
 
-    const int screenWidth = 1000, screenHeight = 800;
+    const int screenWidth = 1600, screenHeight = 1000;
 
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Smoke Simulation");
     window.setFramerateLimit(144);
@@ -25,15 +26,11 @@ int main() {
     sf::Font font;
     // if (!font.loadFromFile("assets/font/CourierPrime-Regular.ttf")) {
     if (!font.loadFromFile("assets/font/Roboto-Regular.ttf")) {
-        std::cerr << "Failed to load Courier font" << std::endl;
+        std::cerr << "Failed to load Roboto Regular font" << std::endl;
     }
 
-    sf::Text fpsText;
-    fpsText.setFont(font);
-    fpsText.setCharacterSize(20);
-    fpsText.setFillColor(Color::White);
-    fpsText.setPosition(screenWidth - 120, 40);
-    
+    UIRenderer UIR = UIRenderer(font, 15, Color::White, window);
+
     // Game Loop
     while (window.isOpen()) {
         sf::Event event;
@@ -43,12 +40,16 @@ int main() {
         }
 
         fps.update();
-        fpsText.setString("Fps: " + std::to_string(fps.getFps()));
+        UIR.updateFPS(std::to_string(fps.getFps()));
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        UIR.updateMouseCoord(mousePos.x, mousePos.y);
+
+
 
 
 
         window.clear(Color::Black);
-        window.draw(fpsText);
+        UIR.renderUI(window);
         window.display();
     }
 

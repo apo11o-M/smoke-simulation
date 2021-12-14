@@ -10,25 +10,30 @@ using std::vector;
 using sf::Text;
 using sf::Font;
 using std::string;
+using std::cout;
+using std::endl;
 
 class UIRenderer {
     private:
-        Font font;
-        int size;
-        sf::Color color;
-
-    private:
+        sf::RenderWindow& window;
+        int screenWidth;
+        int screenHeight;
+        
         Text fpsText;
-        Text mouseCoordText;
+        Text mouseCoordTextX;
+        Text mouseCoordTextY;
 
     public:
-        UIRenderer();
-        UIRenderer(Font defultFont, int defaultSize, sf::Color defaultColor);
+        UIRenderer(Font&, int, sf::Color, sf::RenderWindow&);
 
-        // void addUI(string, Font, int charSize, sf::Color, int posX, int posY);
-        void updateFPS(string);
+        void updateFPS(string fps);
+        void updateMouseCoord(int x, int y);
 
         void renderUI(sf::RenderWindow&);
+
+    private:
+        void createFpsText(Font&, int, sf::Color, int x, int y);
+        void createMouseCoordText(Font&, int, sf::Color, int x, int y);
 
 };
 #endif
