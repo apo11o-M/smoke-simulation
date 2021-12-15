@@ -12,6 +12,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_STANDARD 17)
 
 ADD_SUBDIRECTORY(SFML)
-ADD_EXECUTABLE(smoke-simulation Fps.cpp UIRenderer.cpp main.cpp)
+ADD_EXECUTABLE(smoke-simulation Fps.cpp UIRenderer.cpp Smoke.cpp SmokeGroup.cpp main.cpp)
 
 TARGET_LINK_LIBRARIES(smoke-simulation sfml-graphics sfml-window sfml-system)

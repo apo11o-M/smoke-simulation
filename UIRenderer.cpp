@@ -12,10 +12,8 @@ void UIRenderer::updateFPS(string str) {
 }
 
 void UIRenderer::updateMouseCoord(int x, int y) {
-    int width = window.getSize().x;
-    int height = window.getSize().y;
-    mouseCoordTextX.setString("X: " + std::to_string(std::clamp(x, 0, width)));
-    mouseCoordTextY.setString("Y: " + std::to_string(std::clamp(height - y, 0, height)));
+    mouseCoordTextX.setString("X: " + std::to_string(std::clamp(x, 0, screenWidth)));
+    mouseCoordTextY.setString("Y: " + std::to_string(std::clamp(screenHeight - y, 0, screenHeight)));
 
 }
 
