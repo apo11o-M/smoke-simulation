@@ -72,13 +72,12 @@ class Smoke {
         // calculate the angle between the starting position and the mouse position relative to the 
         // x axis, also consider the random offsets
         float calcSpriteMouseAngle(sf::Vector2i);
-        // randomize the rotation of the sprite
-        void randRotAngle();
         // update the current speed of the smoke particle
         void updateSpeed();
         // update the alpha of the sprite
         void updateAlpha();
-
+        // update the size of the sprite
+        void updateSize();
 
 };
 #endif

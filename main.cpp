@@ -18,7 +18,6 @@ int main() {
 
     const int screenWidth = 1600, screenHeight = 1000;
     bool leftMouseDown = false;
-    int spawnFreq = 10;
     int spawnPosX = 130;
     int spawnPosY = 500;
 
@@ -38,8 +37,8 @@ int main() {
     UIRenderer UIR = UIRenderer(font, 15, Color::White, window);
 
     sf::Texture smokeTexture;
-    // if (!smokeTexture.loadFromFile("assets/textures/smoke.png")) {
-    if (!smokeTexture.loadFromFile("assets/textures/white.png")) {
+    if (!smokeTexture.loadFromFile("assets/textures/smoke.png")) {
+// if (!smokeTexture.loadFromFile("assets/textures/white.png")) {
         std::cerr << "Failed to load image \"smoke.png\"" << std::endl;
     }
     
@@ -80,13 +79,9 @@ int main() {
         UIR.updateMouseCoord(mousePos.x, mousePos.y);
         UIR.updateSmokeGroup(smokeGroup);
 
-        if (leftMouseDown && spawnFreq >= 4) {
+        if (leftMouseDown) {
             smokeGroup.addSmoke(new Smoke(smokeTexture, spawnPosX, spawnPosY, mousePos));
-            spawnFreq = 0;
-        } else {
-            spawnFreq++;
         }
-
         smokeGroup.updateSmoke();
 
 

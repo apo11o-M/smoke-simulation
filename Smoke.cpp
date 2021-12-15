@@ -7,21 +7,22 @@ Smoke::Smoke(sf::Texture& t, int xPos, int yPos, sf::Vector2i mousePos) {
     maxSpriteScale = 0.9;
     minSpriteScale = 0.15;
     smokeSprite.setScale(minSpriteScale, minSpriteScale);
+    smokeSprite.setRotation(static_cast<double>(rand()) / static_cast<double>(RAND_MAX / 360.0));
 
     maxLife = 540 + rand() / (RAND_MAX / 50);
     currLife = maxLife;
     deprecateRate = -1;
     isAlive = true;
 
-    randSpeed = 4;
-    maxSpeed = 5 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
+    randSpeed = 3;
+    maxSpeed = 4 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
     currSpeed = maxSpeed;
-    resistance = 3.9;
+    resistance = 3;
 
     randSpriteMouseAngle = 10;
     spriteMouseAngle = this->calcSpriteMouseAngle(mousePos);
 
-    maxAlpha = 50 + rand() / (RAND_MAX / 20);
+    maxAlpha = 40 + rand() / (RAND_MAX / 20);
     currAlpha = maxAlpha;
 }
 
@@ -34,8 +35,7 @@ void Smoke::updateSmoke() {
         this->updateSpeed();
         this->updateAlpha();
         this->updateSize();
-        
-    }
+      }
 }
 
 void Smoke::renderSmoke(sf::RenderWindow& window) {
@@ -85,11 +85,14 @@ void Smoke::updateAlpha() {
 void Smoke::updateSize() {
     // Linear
     // currSpriteScale = minSpriteScale * (2 - (static_cast<float>(currLife) / static_cast<float>(maxLife)));
+
     // Exponentional
     // currSpriteScale = 0.05 * exp(0.005 * (maxLife - currLife) + 1);
     // currSpriteScale = 0.9 / (1.0 + exp(-0.009 * (maxLife - currLife - maxLife / 2))) + 0.077;
+
     // Logistic Function
-    currSpriteScale = maxSpriteScale / (1.0 + exp(-0.02 * (maxLife - currLife - 150))) + 0.107;
-    cout << "curr " << currSpriteScale << " ";
+    // currSpriteScale = maxSpriteScale / (1.0 + exp(-0.02 * (maxLife - currLife - 150))) + 0.107;
+    // currSpriteScale = maxSpriteScale / (1.2 + exp(-0.02 * (maxLife - currLife - 130))) + 0.067;
+    currSpriteScale = maxSpriteScale / (1.4 + exp(-0.03 * (maxLife - currLife - 100))) + 0.084;
     smokeSprite.setScale(currSpriteScale, currSpriteScale);
 }
