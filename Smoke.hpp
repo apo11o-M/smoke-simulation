@@ -22,13 +22,18 @@ class Smoke {
         // The maximum speed of the smoke particle
         double maxSpeed;
         // The moving speed of the smoke particle
-        double speed;
+        double currSpeed;
         // Some speed variations to offset the speed
         double randSpeed;
+
+        // The maximum alpha value of the smokesprite
+        int maxAlpha;
+        // The current alpha value of the smoke sprite 
+        int currAlpha;
         // The angle (degree) between the starting position and the mouse position relative to the x axis
-        float vertAngle;
-        // Some angle (degree) variations to offset the vertAngle
-        float randAngle;
+        float spriteMouseAngle;
+        // Some angle (degree) variations to offset the spriteMouseAngle
+        float randSpriteMouseAngle;
 
         // The maximum life of the smoke particle
         int maxLife;

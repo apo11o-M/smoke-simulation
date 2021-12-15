@@ -51,7 +51,7 @@ int main() {
     spawnSq.setOrigin(smokeTexture.getSize().x / 2, smokeTexture.getSize().y / 2);
     spawnSq.setPosition(spawnPosX, spawnPosY);
     spawnSq.setScale(0.15, 0.15);
-    spawnSq.setColor(Color(255, 255, 255, 128));
+    spawnSq.setColor(Color(255, 255, 255, 64));
 
     // Game Loop
     while (window.isOpen()) {
