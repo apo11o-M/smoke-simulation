@@ -18,7 +18,6 @@ int main() {
 
     const int screenWidth = 1600, screenHeight = 1000;
     bool leftMouseDown = false;
-    int spawnFreq = 3;
     int spawnPosX = 130;
     int spawnPosY = 500;
 
@@ -32,15 +31,14 @@ int main() {
 
     Fps fps;
     sf::Font font;
-    // if (!font.loadFromFile("assets/font/CourierPrime-Regular.ttf")) {
     if (!font.loadFromFile("assets/font/Roboto-Regular.ttf")) {
         std::cerr << "Failed to load Roboto Regular font" << std::endl;
     }
     UIRenderer UIR = UIRenderer(font, 15, Color::White, window);
 
     sf::Texture smokeTexture;
-    // if (!smokeTexture.loadFromFile("assets/textures/smoke.png")) {
-    if (!smokeTexture.loadFromFile("assets/textures/white.png")) {
+    if (!smokeTexture.loadFromFile("assets/textures/smoke.png")) {
+// if (!smokeTexture.loadFromFile("assets/textures/white.png")) {
         std::cerr << "Failed to load image \"smoke.png\"" << std::endl;
     }
     
@@ -51,7 +49,7 @@ int main() {
     spawnSq.setOrigin(smokeTexture.getSize().x / 2, smokeTexture.getSize().y / 2);
     spawnSq.setPosition(spawnPosX, spawnPosY);
     spawnSq.setScale(0.15, 0.15);
-    spawnSq.setColor(Color(255, 255, 255, 128));
+    spawnSq.setColor(Color(255, 255, 255, 64));
 
     // Game Loop
     while (window.isOpen()) {
@@ -79,14 +77,11 @@ int main() {
         fps.update();
         UIR.updateFPS(std::to_string(fps.getFps()));
         UIR.updateMouseCoord(mousePos.x, mousePos.y);
+        UIR.updateSmokeGroup(smokeGroup);
 
-        if (leftMouseDown && spawnFreq >= 2) {
+        if (leftMouseDown) {
             smokeGroup.addSmoke(new Smoke(smokeTexture, spawnPosX, spawnPosY, mousePos));
-            spawnFreq = 0;
-        } else {
-            spawnFreq++;
         }
-
         smokeGroup.updateSmoke();
 
 

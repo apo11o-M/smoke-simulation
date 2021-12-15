@@ -4,17 +4,26 @@ Smoke::Smoke(sf::Texture& t, int xPos, int yPos, sf::Vector2i mousePos) {
     smokeSprite.setTexture(t);
     smokeSprite.setOrigin(t.getSize().x / 2, t.getSize().y / 2);
     smokeSprite.setPosition(xPos, yPos);
-    smokeSprite.setScale(0.15, 0.15);
+    maxSpriteScale = 0.9;
+    minSpriteScale = 0.15;
+    smokeSprite.setScale(minSpriteScale, minSpriteScale);
+    smokeSprite.setRotation(static_cast<double>(rand()) / static_cast<double>(RAND_MAX / 360.0));
 
     maxLife = 540 + rand() / (RAND_MAX / 50);
     currLife = maxLife;
     deprecateRate = -1;
     isAlive = true;
-    randSpeed = 4;
-    maxSpeed = 4.5 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
-    speed = maxSpeed;
-    randAngle = 10;
-    vertAngle = this->calcVertAngle(mousePos);
+
+    randSpeed = 3;
+    maxSpeed = 4 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
+    currSpeed = maxSpeed;
+    resistance = 3;
+
+    randSpriteMouseAngle = 10;
+    spriteMouseAngle = this->calcSpriteMouseAngle(mousePos);
+
+    maxAlpha = 40 + rand() / (RAND_MAX / 20);
+    currAlpha = maxAlpha;
 }
 
 void Smoke::updateSmoke() {
@@ -22,10 +31,11 @@ void Smoke::updateSmoke() {
         isAlive = false;
     } else {
         this->decreaseLifeSpan();
-        this->move();
+        this->move(); 
         this->updateSpeed();
         this->updateAlpha();
-    }
+        this->updateSize();
+      }
 }
 
 void Smoke::renderSmoke(sf::RenderWindow& window) {
@@ -45,10 +55,10 @@ void Smoke::decreaseLifeSpan() {
 }
 
 void Smoke::move() {
-    smokeSprite.move(speed * cos(vertAngle * PI / 180.0), speed * sin(vertAngle * PI / 180.0));
+    smokeSprite.move(currSpeed * cos(spriteMouseAngle * PI / 180.0), currSpeed * sin(spriteMouseAngle * PI / 180.0));
 }
 
-float Smoke::calcVertAngle(sf::Vector2i mousePos) {
+float Smoke::calcSpriteMouseAngle(sf::Vector2i mousePos) {
     int xPos = smokeSprite.getPosition().x;
     int yPos = smokeSprite.getPosition().y;
     float v1;
@@ -58,16 +68,31 @@ float Smoke::calcVertAngle(sf::Vector2i mousePos) {
         v1 = atan(static_cast<float>(mousePos.y - yPos) / static_cast<float>(mousePos.x - xPos)) * 180 / PI;
     }
     // Add random angles to the current angle
-    float r2 = -randAngle + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2 * randAngle)));
+    float r2 = -randSpriteMouseAngle + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (2 * randSpriteMouseAngle)));
     v1 += r2;
     return v1;
 }
 
 void Smoke::updateSpeed() {
-    speed = maxSpeed * exp(-(1.0 / (static_cast<double>(maxLife) / 3.9)) * (maxLife - currLife));
+    currSpeed = maxSpeed * exp(-(1.0 / (static_cast<double>(maxLife) / resistance)) * (maxLife - currLife));
 }
 
 void Smoke::updateAlpha() {
-    int ratio = 128 * (static_cast<float>(currLife) / static_cast<float>(maxLife));
-    smokeSprite.setColor(Color(255, 255, 255, ratio));
+    currAlpha = maxAlpha * (static_cast<float>(currLife) / static_cast<float>(maxLife));
+    smokeSprite.setColor(Color(255, 255, 255, currAlpha));
+}
+
+void Smoke::updateSize() {
+    // Linear
+    // currSpriteScale = minSpriteScale * (2 - (static_cast<float>(currLife) / static_cast<float>(maxLife)));
+
+    // Exponentional
+    // currSpriteScale = 0.05 * exp(0.005 * (maxLife - currLife) + 1);
+    // currSpriteScale = 0.9 / (1.0 + exp(-0.009 * (maxLife - currLife - maxLife / 2))) + 0.077;
+
+    // Logistic Function
+    // currSpriteScale = maxSpriteScale / (1.0 + exp(-0.02 * (maxLife - currLife - 150))) + 0.107;
+    // currSpriteScale = maxSpriteScale / (1.2 + exp(-0.02 * (maxLife - currLife - 130))) + 0.067;
+    currSpriteScale = maxSpriteScale / (1.4 + exp(-0.03 * (maxLife - currLife - 100))) + 0.084;
+    smokeSprite.setScale(currSpriteScale, currSpriteScale);
 }
