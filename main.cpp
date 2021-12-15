@@ -18,7 +18,7 @@ int main() {
 
     const int screenWidth = 1600, screenHeight = 1000;
     bool leftMouseDown = false;
-    int spawnFreq = 3;
+    int spawnFreq = 10;
     int spawnPosX = 130;
     int spawnPosY = 500;
 
@@ -80,7 +80,7 @@ int main() {
         UIR.updateMouseCoord(mousePos.x, mousePos.y);
         UIR.updateSmokeGroup(smokeGroup);
 
-        if (leftMouseDown && spawnFreq >= 2) {
+        if (leftMouseDown && spawnFreq >= 4) {
             smokeGroup.addSmoke(new Smoke(smokeTexture, spawnPosX, spawnPosY, mousePos));
             spawnFreq = 0;
         } else {

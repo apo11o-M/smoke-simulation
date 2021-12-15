@@ -4,7 +4,9 @@ Smoke::Smoke(sf::Texture& t, int xPos, int yPos, sf::Vector2i mousePos) {
     smokeSprite.setTexture(t);
     smokeSprite.setOrigin(t.getSize().x / 2, t.getSize().y / 2);
     smokeSprite.setPosition(xPos, yPos);
-    smokeSprite.setScale(0.15, 0.15);
+    maxSpriteScale = 0.9;
+    minSpriteScale = 0.15;
+    smokeSprite.setScale(minSpriteScale, minSpriteScale);
 
     maxLife = 540 + rand() / (RAND_MAX / 50);
     currLife = maxLife;
@@ -12,13 +14,13 @@ Smoke::Smoke(sf::Texture& t, int xPos, int yPos, sf::Vector2i mousePos) {
     isAlive = true;
 
     randSpeed = 4;
-    maxSpeed = 4.5 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
+    maxSpeed = 5 + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / randSpeed));
     currSpeed = maxSpeed;
+    resistance = 3.9;
 
     randSpriteMouseAngle = 10;
-    spriteMouseAngle = this->calcVertAngle(mousePos);
+    spriteMouseAngle = this->calcSpriteMouseAngle(mousePos);
 
-    // maxAlpha = 64;
     maxAlpha = 50 + rand() / (RAND_MAX / 20);
     currAlpha = maxAlpha;
 }
@@ -28,9 +30,11 @@ void Smoke::updateSmoke() {
         isAlive = false;
     } else {
         this->decreaseLifeSpan();
-        this->move();
+        this->move(); 
         this->updateSpeed();
         this->updateAlpha();
+        this->updateSize();
+        
     }
 }
 
@@ -54,7 +58,7 @@ void Smoke::move() {
     smokeSprite.move(currSpeed * cos(spriteMouseAngle * PI / 180.0), currSpeed * sin(spriteMouseAngle * PI / 180.0));
 }
 
-float Smoke::calcVertAngle(sf::Vector2i mousePos) {
+float Smoke::calcSpriteMouseAngle(sf::Vector2i mousePos) {
     int xPos = smokeSprite.getPosition().x;
     int yPos = smokeSprite.getPosition().y;
     float v1;
@@ -70,10 +74,22 @@ float Smoke::calcVertAngle(sf::Vector2i mousePos) {
 }
 
 void Smoke::updateSpeed() {
-    currSpeed = maxSpeed * exp(-(1.0 / (static_cast<double>(maxLife) / 3.9)) * (maxLife - currLife));
+    currSpeed = maxSpeed * exp(-(1.0 / (static_cast<double>(maxLife) / resistance)) * (maxLife - currLife));
 }
 
 void Smoke::updateAlpha() {
     currAlpha = maxAlpha * (static_cast<float>(currLife) / static_cast<float>(maxLife));
     smokeSprite.setColor(Color(255, 255, 255, currAlpha));
+}
+
+void Smoke::updateSize() {
+    // Linear
+    // currSpriteScale = minSpriteScale * (2 - (static_cast<float>(currLife) / static_cast<float>(maxLife)));
+    // Exponentional
+    // currSpriteScale = 0.05 * exp(0.005 * (maxLife - currLife) + 1);
+    // currSpriteScale = 0.9 / (1.0 + exp(-0.009 * (maxLife - currLife - maxLife / 2))) + 0.077;
+    // Logistic Function
+    currSpriteScale = maxSpriteScale / (1.0 + exp(-0.02 * (maxLife - currLife - 150))) + 0.107;
+    cout << "curr " << currSpriteScale << " ";
+    smokeSprite.setScale(currSpriteScale, currSpriteScale);
 }

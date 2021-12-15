@@ -25,11 +25,19 @@ class Smoke {
         double currSpeed;
         // Some speed variations to offset the speed
         double randSpeed;
+        // How fast does the speed decrease
+        double resistance;
 
         // The maximum alpha value of the smokesprite
         int maxAlpha;
         // The current alpha value of the smoke sprite 
         int currAlpha;
+        // The maximum/ending size of the sprite
+        float maxSpriteScale;
+        // the minimum/starting size of the sprite
+        float minSpriteScale;
+        // the current size of the sprite
+        float currSpriteScale;
         // The angle (degree) between the starting position and the mouse position relative to the x axis
         float spriteMouseAngle;
         // Some angle (degree) variations to offset the spriteMouseAngle
@@ -63,11 +71,14 @@ class Smoke {
         void move();
         // calculate the angle between the starting position and the mouse position relative to the 
         // x axis, also consider the random offsets
-        float calcVertAngle(sf::Vector2i);
+        float calcSpriteMouseAngle(sf::Vector2i);
+        // randomize the rotation of the sprite
+        void randRotAngle();
         // update the current speed of the smoke particle
         void updateSpeed();
         // update the alpha of the sprite
         void updateAlpha();
+
 
 };
 #endif
