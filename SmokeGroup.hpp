@@ -21,6 +21,7 @@ class SmokeGroup {
         void updateSmoke();
         void addSmoke(Smoke*);
         void renderSmoke(sf::RenderWindow& window);
+        unsigned int getSize();
 
 };
 #endif

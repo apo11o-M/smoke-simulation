@@ -32,7 +32,6 @@ int main() {
 
     Fps fps;
     sf::Font font;
-    // if (!font.loadFromFile("assets/font/CourierPrime-Regular.ttf")) {
     if (!font.loadFromFile("assets/font/Roboto-Regular.ttf")) {
         std::cerr << "Failed to load Roboto Regular font" << std::endl;
     }
@@ -79,6 +78,7 @@ int main() {
         fps.update();
         UIR.updateFPS(std::to_string(fps.getFps()));
         UIR.updateMouseCoord(mousePos.x, mousePos.y);
+        UIR.updateSmokeGroup(smokeGroup);
 
         if (leftMouseDown && spawnFreq >= 2) {
             smokeGroup.addSmoke(new Smoke(smokeTexture, spawnPosX, spawnPosY, mousePos));
