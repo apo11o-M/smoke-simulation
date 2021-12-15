@@ -23,3 +23,7 @@ void SmokeGroup::renderSmoke(sf::RenderWindow& window) {
         smokeGroup[i]->renderSmoke(window);
     }
 }
+
+unsigned int SmokeGroup::getSize() {
+    return smokeGroup.size();
+}
